@@ -1,0 +1,8 @@
+{
+  "_id": "MONGOID",
+  "name": "Programación I",
+  "courseDescription": "Curso de introducción a la Programación",
+  "credits": 4,
+  "career": "OjectId(careers)",
+  "user": "OjectId(users)"
+}
