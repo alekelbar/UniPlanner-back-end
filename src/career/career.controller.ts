@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 import { CareerService } from './career.service';
-import { CreateCareerDto } from './dto/create-career.dto';
-import { UpdateCareerDto } from './dto/update-career.dto';
 
 @Controller('career')
 export class CareerController {
@@ -21,7 +12,7 @@ export class CareerController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.careerService.findOne(+id);
+  findOne(@Param('id', ParseMongoIdPipe) id: string) {
+    return this.careerService.findOne(id);
   }
 }
