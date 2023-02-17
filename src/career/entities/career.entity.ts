@@ -8,6 +8,7 @@ export class Career {
   @Prop({
     unique: true,
     index: true,
+    required: true,
   })
   name: string;
 }

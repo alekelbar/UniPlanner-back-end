@@ -10,22 +10,28 @@ export class User {
   @Prop({
     unique: true,
     index: true,
+    required: true,
   })
   identification: string;
 
-  @Prop()
+  @Prop({
+    required: true,
+  })
   fullname: string;
 
   @Prop({
     unique: true,
     index: true,
+    required: true,
   })
   email: string;
 
-  @Prop()
+  @Prop({
+    required: true,
+  })
   password: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Career' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Career', required: true })
   career: Career;
 }
 export const UserSchema = SchemaFactory.createForClass(User);
