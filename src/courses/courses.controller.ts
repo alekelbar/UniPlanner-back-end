@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 
 @Controller('courses')
 export class CoursesController {
@@ -18,17 +27,20 @@ export class CoursesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.coursesService.findOne(+id);
+  findOne(@Param('id', ParseMongoIdPipe) id: string) {
+    return this.coursesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
-    return this.coursesService.update(+id, updateCourseDto);
+  update(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @Body() updateCourseDto: UpdateCourseDto,
+  ) {
+    return this.coursesService.update(id, updateCourseDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.coursesService.remove(+id);
+  remove(@Param('id', ParseMongoIdPipe) id: string) {
+    return this.coursesService.remove(id);
   }
 }

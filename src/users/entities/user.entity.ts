@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { Career } from '../../career/entities/career.entity';
+import { Career } from '../../careers/entities/career.entity';
 import * as bcrypt from 'bcrypt';
 
 export type userDocument = HydratedDocument<User>;
@@ -9,7 +9,6 @@ export type userDocument = HydratedDocument<User>;
 export class User {
   @Prop({
     unique: true,
-    index: true,
     required: true,
   })
   identification: string;
@@ -21,7 +20,6 @@ export class User {
 
   @Prop({
     unique: true,
-    index: true,
     required: true,
   })
   email: string;

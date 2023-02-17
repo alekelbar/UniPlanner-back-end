@@ -2,7 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 import { CareerService } from './career.service';
 
-@Controller('career')
+@Controller('careers')
 export class CareerController {
   constructor(private readonly careerService: CareerService) {}
 

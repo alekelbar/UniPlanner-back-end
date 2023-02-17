@@ -1,18 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { User } from 'src/user/entities/user.entity';
-import { Career } from '../../career/entities/career.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Career } from '../../careers/entities/career.entity';
+import mongoose from 'mongoose';
 
 export type CourseDocument = HydratedDocument<Course>;
 
 @Schema()
 export class Course {
   @Prop({
-    index: true,
     required: true,
   })
   name: string;
-  
+
   @Prop({
     required: true,
   })
@@ -25,11 +25,15 @@ export class Course {
 
   @Prop({
     required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Career',
   })
   career: Career;
-  
+
   @Prop({
     required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   })
   user: User;
 }

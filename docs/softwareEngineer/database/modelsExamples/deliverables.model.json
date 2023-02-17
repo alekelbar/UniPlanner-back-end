@@ -2,9 +2,10 @@
   "_id": "MONGOID",
   "name": "Proyecto Final",
   "description": "Construir la aplicación web para organización de estudiantes",
-  "deadline": "ISODate('2022-05-01T23:59:59Z')",
+  "deadline": "dd/mm/yyyy",
   "status": "delivered|undelivered|reviewing",
   "note": 0,
+  "createdAt": "dd/mm/yyyy",
   "percent": 25.0,
   "course": "OjectId(course)"
 }

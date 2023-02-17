@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CareerModule } from './career/career.module';
+import { CareerModule } from './careers/career.module';
 import { CommonModule } from './common/common.module';
 import { appConfig } from './common/config/app.config';
 import { joiValidation } from './common/config/joi.validation';
-import { UserModule } from './user/user.module';
+import { UserModule } from './users/user.module';
 import { CoursesModule } from './courses/courses.module';
+import { DeliverablesModule } from './deliverables/deliverables.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CoursesModule } from './courses/courses.module';
     CommonModule,
     UserModule,
     CoursesModule,
+    DeliverablesModule,
   ],
   controllers: [],
   exports: [],
