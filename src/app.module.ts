@@ -6,6 +6,7 @@ import { CommonModule } from './common/common.module';
 import { appConfig } from './common/config/app.config';
 import { joiValidation } from './common/config/joi.validation';
 import { UserModule } from './user/user.module';
+import { CoursesModule } from './courses/courses.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from './user/user.module';
     CareerModule,
     CommonModule,
     UserModule,
+    CoursesModule,
   ],
   controllers: [],
   exports: [],
