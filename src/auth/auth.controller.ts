@@ -12,6 +12,8 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UseGuards } from '@nestjs/common';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +24,7 @@ export class AuthController {
     return this.userService.register(createUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':ID')
   findByIdentification(@Param('ID') ID: string) {
     return this.userService.findOneByIdentification(ID);
@@ -32,6 +35,7 @@ export class AuthController {
     return this.userService.login(loginUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();
