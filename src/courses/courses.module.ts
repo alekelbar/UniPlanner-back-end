@@ -3,8 +3,8 @@ import { CoursesService } from './courses.service';
 import { CoursesController } from './courses.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Course, CourseSchema } from './entities/course.entity';
-import { User } from 'src/users/entities/user.entity';
-import { UserSchema } from '../users/entities/user.entity';
+import { User } from 'src/auth/entities/user.entity';
+import { UserSchema } from '../auth/entities/user.entity';
 import { Career, CareerSchema } from '../careers/entities/career.entity';
 
 @Module({

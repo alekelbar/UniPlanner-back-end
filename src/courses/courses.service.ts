@@ -9,7 +9,7 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course, CourseDocument } from './entities/course.entity';
 import { Model } from 'mongoose';
-import { User, userDocument } from '../users/entities/user.entity';
+import { User, userDocument } from '../auth/entities/user.entity';
 import { Career, CareerDocument } from '../careers/entities/career.entity';
 
 @Injectable()

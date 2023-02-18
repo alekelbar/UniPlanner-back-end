@@ -15,6 +15,7 @@ import { Model } from 'mongoose';
 enum DELIVERABLES_EXCEPTIONS {
   NOT_EXIST = 'deliverable does not exits',
   INVALID_SCHEMA = 'data structure has been incorrect(probably, status)',
+  VALIDATION_FAILED = 'Validation failed',
 }
 
 @Injectable()
@@ -60,7 +61,7 @@ export class DeliverablesService {
         { new: true, runValidators: true },
       );
     } catch (error) {
-      if (error._message == 'Validation failed') {
+      if (error._message == DELIVERABLES_EXCEPTIONS.VALIDATION_FAILED) {
         throw new BadRequestException(DELIVERABLES_EXCEPTIONS.INVALID_SCHEMA);
       }
       throw new InternalServerErrorException();

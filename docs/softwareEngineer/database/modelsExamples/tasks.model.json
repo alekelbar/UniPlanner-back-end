@@ -1,5 +1,5 @@
 {
-  "nombre": "Análisis de requerimientos",
+  "name": "Análisis de requerimientos",
   "descripcion": "Definir los requisitos del proyecto",
   "status": "COMPLETE|INCOMPLETE",
   "delivery": "OjectId(deliverables)"
