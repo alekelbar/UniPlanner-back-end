@@ -13,6 +13,7 @@ import { CreateDeliverableDto } from './dto/create-deliverable.dto';
 import { UpdateDeliverableDto } from './dto/update-deliverable.dto';
 import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Query } from '@nestjs/common';
 
 
 @UseGuards(JwtAuthGuard)
@@ -26,8 +27,8 @@ export class DeliverablesController {
   }
 
   @Get()
-  findAll() {
-    return this.deliverablesService.findAll();
+  findAll(@Query('page') page: number = 0) {
+    return this.deliverablesService.findAll(page);
   }
 
   @Get(':id')

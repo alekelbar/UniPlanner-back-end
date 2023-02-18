@@ -11,6 +11,7 @@ import { Course, CourseDocument } from './entities/course.entity';
 import { Model } from 'mongoose';
 import { User, userDocument } from '../auth/entities/user.entity';
 import { Career, CareerDocument } from '../careers/entities/career.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CoursesService {
@@ -18,6 +19,7 @@ export class CoursesService {
     @InjectModel(Course.name) private courseModel: Model<CourseDocument>,
     @InjectModel(User.name) private userModel: Model<userDocument>,
     @InjectModel(Career.name) private careerModel: Model<CareerDocument>,
+    private configService: ConfigService,
   ) {}
 
   async create(createCourseDto: CreateCourseDto) {
@@ -33,12 +35,11 @@ export class CoursesService {
     if (!career) {
       throw new BadRequestException('Career does not exist');
     }
-    
+
     try {
       // create the course
       course = await this.courseModel.create(createCourseDto);
     } catch (error) {
-      
       if (error.code == 11000) {
         throw new BadRequestException('this course already exits');
       }
@@ -48,8 +49,11 @@ export class CoursesService {
     return course;
   }
 
-  async findAll() {
-    return await this.courseModel.find();
+  async findAll(page: number) {
+    return await this.courseModel
+      .find()
+      .limit(this.configService.get('limitPerPage'))
+      .skip(this.configService.get('skipPerPage') * page);
   }
 
   async findOne(id: string) {

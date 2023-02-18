@@ -13,6 +13,7 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Query } from '@nestjs/common';
 
 @UseGuards(JwtAuthGuard)
 @Controller('courses')
@@ -25,8 +26,8 @@ export class CoursesController {
   }
 
   @Get()
-  findAll() {
-    return this.coursesService.findAll();
+  findAll(@Query('page') page: number = 0) {
+    return this.coursesService.findAll(page);
   }
 
   @Get(':id')

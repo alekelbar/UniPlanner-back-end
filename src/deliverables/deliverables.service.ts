@@ -11,6 +11,7 @@ import {
   DeliverableDocument,
 } from './entities/deliverable.entity';
 import { Model } from 'mongoose';
+import { ConfigService } from '@nestjs/config';
 
 enum DELIVERABLES_EXCEPTIONS {
   NOT_EXIST = 'deliverable does not exits',
@@ -23,6 +24,7 @@ export class DeliverablesService {
   constructor(
     @InjectModel(Deliverable.name)
     private deliverableModel: Model<DeliverableDocument>,
+    private configService: ConfigService,
   ) {}
 
   async create(createDeliverableDto: CreateDeliverableDto) {
@@ -32,8 +34,12 @@ export class DeliverablesService {
     if (!deliverable) throw new InternalServerErrorException();
   }
 
-  async findAll() {
-    const deliverables = await this.deliverableModel.find();
+  async findAll(page: number) {
+    const deliverables = await this.deliverableModel
+      .find()
+      .limit(this.configService.get('limitPerPage'))
+      .skip(this.configService.get('skipPerPage') * page);
+      
     if (!deliverables) throw new InternalServerErrorException();
     return deliverables;
   }

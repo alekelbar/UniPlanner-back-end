@@ -8,6 +8,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task, TaskDocument } from './entities/task.entity';
 import { Model } from 'mongoose';
+import { ConfigService } from '@nestjs/config';
 
 enum TASK_EXCEPTIONS {
   NOT_EXIST = 'Task does not exist',
@@ -16,7 +17,10 @@ enum TASK_EXCEPTIONS {
 
 @Injectable()
 export class TasksService {
-  constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
+  constructor(
+    @InjectModel(Task.name) private taskModel: Model<TaskDocument>,
+    private configService: ConfigService,
+  ) {}
 
   async create(createTaskDto: CreateTaskDto) {
     try {
@@ -29,8 +33,11 @@ export class TasksService {
     }
   }
 
-  findAll() {
-    return this.taskModel.find();
+  findAll(page: number) {
+    return this.taskModel
+      .find()
+      .limit(this.configService.get('limitPerPage'))
+      .skip(this.configService.get('skipPerPage') * page);
   }
 
   async findOne(id: string) {

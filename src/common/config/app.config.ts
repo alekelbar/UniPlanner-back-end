@@ -3,4 +3,6 @@ export const appConfig = () => ({
   mongodb: process.env.MONGODB,
   port: process.env.PORT || 3000,
   jwtSecret: process.env.JWT_SECRET,
+  skipPerPage: process.env.SKIP_PAGE || 5,
+  limitPerPage: process.env.LIMIT_PER_PAGE || 5,
 });

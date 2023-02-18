@@ -13,6 +13,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Query } from '@nestjs/common';
 
 
 @UseGuards(JwtAuthGuard)
@@ -26,8 +27,8 @@ export class TasksController {
   }
 
   @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  findAll(@Query('page') page: number = 0) {
+    return this.tasksService.findAll(page);
   }
 
   @Get(':id')

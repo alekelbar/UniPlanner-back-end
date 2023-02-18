@@ -3,6 +3,7 @@ import { CareerService } from './career.service';
 import { CareerController } from './career.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Career, CareerSchema } from './entities/career.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Career, CareerSchema } from './entities/career.entity';
         schema: CareerSchema,
       },
     ]),
+    ConfigModule
   ],
   controllers: [CareerController],
   providers: [CareerService],

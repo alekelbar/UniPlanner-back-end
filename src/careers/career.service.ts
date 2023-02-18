@@ -7,15 +7,20 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Career, CareerDocument } from './entities/career.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CareerService {
   constructor(
     @InjectModel(Career.name) private careerModel: Model<CareerDocument>,
+    private configService: ConfigService,
   ) {}
 
-  findAll() {
-    return this.careerModel.find();
+  findAll(page: number) {
+    return this.careerModel
+      .find()
+      .limit(this.configService.get('limitPerPage'))
+      .skip(this.configService.get('skipPerPage') * page);
   }
 
   async findOne(id: string) {

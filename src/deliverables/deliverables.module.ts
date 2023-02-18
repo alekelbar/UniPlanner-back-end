@@ -3,6 +3,7 @@ import { DeliverablesService } from './deliverables.service';
 import { DeliverablesController } from './deliverables.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Deliverable, DeliverableSchema } from './entities/deliverable.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Deliverable, DeliverableSchema } from './entities/deliverable.entity';
         schema: DeliverableSchema,
       },
     ]),
+    ConfigModule
   ],
   controllers: [DeliverablesController],
   providers: [DeliverablesService],
