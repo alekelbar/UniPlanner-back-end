@@ -22,20 +22,23 @@ export class CoursesService {
 
   async create(createCourseDto: CreateCourseDto) {
     let course: CourseDocument;
+    // check if the user exits
+    const user = await this.userModel.findById(createCourseDto.user);
+
+    if (!user) {
+      throw new BadRequestException('User does not exist');
+    }
+    // check if the career exist
+    const career = await this.careerModel.findById(createCourseDto.career);
+    if (!career) {
+      throw new BadRequestException('Career does not exist');
+    }
+    
     try {
-      // check if the user exits
-      const user = await this.userModel.findById(createCourseDto.user);
-      if (!user) {
-        throw new BadRequestException('User does not exist');
-      }
-      // check if the career exist
-      const career = await this.careerModel.findById(createCourseDto.career);
-      if (!career) {
-        throw new BadRequestException('Career does not exist');
-      }
       // create the course
       course = await this.courseModel.create(createCourseDto);
     } catch (error) {
+      
       if (error.code == 11000) {
         throw new BadRequestException('this course already exits');
       }
