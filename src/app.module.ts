@@ -22,7 +22,7 @@ import { TasksModule } from './task/tasks.module';
     AuthModule,
     CoursesModule,
     DeliverablesModule,
-    TasksModule,
+    TasksModule
   ],
 })
 export class AppModule {}
