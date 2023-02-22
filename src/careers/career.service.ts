@@ -16,11 +16,16 @@ export class CareerService {
     private configService: ConfigService,
   ) {}
 
-  findAll(page: number) {
+
+  findPaginate(page: number) {
     return this.careerModel
       .find()
       .limit(this.configService.get('limitPerPage'))
       .skip(this.configService.get('skipPerPage') * page);
+  }
+
+  findAll() {
+    return this.careerModel.find();
   }
 
   async findOne(id: string) {

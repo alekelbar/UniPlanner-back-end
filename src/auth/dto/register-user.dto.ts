@@ -1,11 +1,15 @@
 import {
+  ArrayMinSize,
   IsAlphanumeric,
+  IsArray,
   IsEmail,
   IsMongoId,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
+
+import { ObjectId } from 'mongoose';
 
 export class RegisterUserDto {
   @IsString()
@@ -26,6 +30,8 @@ export class RegisterUserDto {
   @IsAlphanumeric()
   password: string;
 
-  @IsMongoId()
-  career: string;
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsMongoId({ each: true })
+  career: ObjectId[];
 }

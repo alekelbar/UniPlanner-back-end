@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { Career, CareerSchema } from '../careers/entities/career.entity';
 
 @Module({
   imports: [
@@ -15,6 +16,10 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       {
         name: User.name,
         schema: UserSchema,
+      },
+      {
+        name: Career.name,
+        schema: CareerSchema,
       },
     ]),
     CommonModule,

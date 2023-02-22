@@ -29,9 +29,10 @@ export class User {
   })
   password: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Career', required: true })
-  career: Career;
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Career' }] })
+  career: mongoose.Types.ObjectId[];
 }
+
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.pre('save', async function (next) {
