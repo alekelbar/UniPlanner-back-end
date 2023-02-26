@@ -1,14 +1,12 @@
 import {
   IsAlphanumeric,
   IsString,
-  MaxLength,
   MinLength,
 } from 'class-validator';
 
 export class LoginUserDto {
   @IsString()
-  @MinLength(9)
-  @MaxLength(9)
+  @MinLength(8)
   identification: string;
 
   @IsString()

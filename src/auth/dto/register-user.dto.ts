@@ -13,12 +13,11 @@ import { ObjectId } from 'mongoose';
 
 export class RegisterUserDto {
   @IsString()
-  @MinLength(9)
-  @MaxLength(9)
+  @MinLength(8)
   identification: string;
 
   @IsString()
-  @MinLength(10)
+  @MinLength(8)
   fullname: string;
 
   @IsEmail()
@@ -33,5 +32,5 @@ export class RegisterUserDto {
   @IsArray()
   @ArrayMinSize(1)
   @IsMongoId({ each: true })
-  career: ObjectId[];
+  careers: ObjectId[];
 }

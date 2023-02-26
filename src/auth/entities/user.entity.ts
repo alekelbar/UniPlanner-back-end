@@ -30,7 +30,7 @@ export class User {
   password: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Career' }] })
-  career: mongoose.Types.ObjectId[];
+  careers: mongoose.Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

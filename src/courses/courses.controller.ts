@@ -30,6 +30,15 @@ export class CoursesController {
     return this.coursesService.findAll(page);
   }
 
+  @Get('user/:idUser/career/:idCareer')
+  findAllFromUser(
+    @Query('page') page: number = 0,
+    @Param('idUser', ParseMongoIdPipe) idUser: string,
+    @Param('idCareer', ParseMongoIdPipe) idCareer: string,
+  ) {
+    return this.coursesService.findAllFromUser(page, idUser, idCareer);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseMongoIdPipe) id: string) {
     return this.coursesService.findOne(id);

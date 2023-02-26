@@ -31,7 +31,7 @@ import { Career, CareerSchema } from '../careers/entities/career.entity';
         return {
           secret: config.get('JWT_SECRET'),
           signOptions: {
-            expiresIn: '2h',
+            expiresIn: '12h',
           },
         };
       },

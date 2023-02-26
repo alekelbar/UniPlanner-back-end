@@ -14,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwtPayload.interface';
 import { Career, CareerDocument } from '../careers/entities/career.entity';
 import { CAREERS_EXCEPTION } from '../careers/career.controller';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 enum USER_EXCEPTIONS {
   NOT_FOUND = 'USER Not Found',
@@ -30,6 +31,58 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  checkToken() {
+    return {
+      ok: true,
+    };
+  }
+
+  async updateUser(updateUserDto: UpdateUserDto, id: string) {
+    const exists = await this.userModel.find({ _id: id });
+
+    if (!exists) {
+      throw new BadRequestException(USER_EXCEPTIONS.NOT_FOUND);
+    }
+
+    try {
+      const user = await this.userModel.findByIdAndUpdate(
+        { _id: id },
+        updateUserDto,
+        {
+          new: true,
+        },
+      );
+      return user;
+    } catch (error: any) {
+      if (error.code === 11000) {
+        throw new BadRequestException(USER_EXCEPTIONS.ALREADY_EXISTS);
+      }
+      throw new InternalServerErrorException(USER_EXCEPTIONS.INTERNAL_ERROR);
+    }
+  }
+
+  async removeCareer(careerId: string, userId: string) {
+    const career = await this.careerModel.findById(careerId);
+    if (!career) {
+      throw new BadRequestException(CAREERS_EXCEPTION.NOT_FOUND);
+    }
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new BadRequestException(USER_EXCEPTIONS.NOT_FOUND);
+    }
+
+    try {
+      await this.userModel.updateOne(
+        { _id: userId },
+        { $pull: { careers: careerId } },
+      );
+
+      return career;
+    } catch (error) {
+      throw new InternalServerErrorException(USER_EXCEPTIONS.INTERNAL_ERROR);
+    }
+  }
+
   async addCareer(careerId: string, userId: string) {
     const career = await this.careerModel.findById(careerId);
     if (!career) {
@@ -39,15 +92,15 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException(USER_EXCEPTIONS.NOT_FOUND);
     }
+
     try {
-      const updated = await this.userModel.updateOne(
+      await this.userModel.updateOne(
         { _id: userId },
-        { $push: { career: careerId } },
-        { new: true },
+        { $push: { careers: careerId } },
       );
-      return updated;
+
+      return career;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException(USER_EXCEPTIONS.INTERNAL_ERROR);
     }
   }
@@ -59,7 +112,7 @@ export class AuthService {
       throw new BadRequestException(USER_EXCEPTIONS.NOT_FOUND);
     }
 
-    const { career: userCareers } = user;
+    const { careers: userCareers } = user;
 
     const careers = userCareers.map(
       async (career) => await this.careerModel.findById(career),
@@ -86,7 +139,7 @@ export class AuthService {
     const { identification, id, fullname, email } = user;
 
     return {
-      token: this.getJwt({ identification }),
+      token: this.getJwt({ id }),
       user: {
         identification,
         id,
@@ -101,6 +154,10 @@ export class AuthService {
       const user = await this.findOneByIdentification(
         loginUserDto.identification,
       );
+
+      if (!user) {
+        throw new BadRequestException(USER_EXCEPTIONS.NOT_FOUND);
+      }
       const { password: userPass } = user;
       const { password: loginPass } = loginUserDto;
 
@@ -108,16 +165,15 @@ export class AuthService {
         throw new UnauthorizedException();
       }
 
-      const { identification, id, fullname, email, career } = user;
+      const { identification, id, fullname, email } = user;
 
       return {
-        token: this.getJwt({ identification }),
+        token: this.getJwt({ id }),
         user: {
           identification,
           id,
           fullname,
           email,
-          career
         },
       };
     } catch (error) {
@@ -130,12 +186,11 @@ export class AuthService {
   }
 
   async findOneByIdentification(identification: string) {
-    const user = await this.userModel.findOne({ identification });
+    return await this.userModel.findOne({ identification });
+  }
 
-    if (!user) {
-      throw new BadRequestException('user Not found');
-    }
-    return user;
+  async findOneByUniqueId(id: string) {
+    return await this.userModel.findById(id);
   }
 
   private getJwt(payload: JwtPayload) {

@@ -8,7 +8,6 @@ export type DeliverableDocument = HydratedDocument<Deliverable>;
 export enum DELIVERABLE_STATUS {
   SEND = 'Enviado',
   PENDING = 'Pendiente',
-  REVIEWED = 'Calificado',
 }
 
 @Schema()
@@ -31,7 +30,7 @@ export class Deliverable {
 
   @Prop({
     required: true,
-    enum: [DELIVERABLE_STATUS.PENDING, DELIVERABLE_STATUS.REVIEWED, DELIVERABLE_STATUS.SEND]
+    enum: [DELIVERABLE_STATUS.PENDING, DELIVERABLE_STATUS.SEND],
   })
   status: string;
 
@@ -43,6 +42,7 @@ export class Deliverable {
   @Prop({
     required: true,
     type: Date,
+    default: new Date(Date.now()),
   })
   createdAt: Date;
 
