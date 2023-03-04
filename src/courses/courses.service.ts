@@ -111,7 +111,6 @@ export class CoursesService {
       );
       return courseUpdate;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException();
     }
   }
