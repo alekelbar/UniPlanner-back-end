@@ -1,7 +1,16 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 import { CareerService } from './career.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AuthService } from 'src/auth/auth.service';
 
 export enum CAREERS_EXCEPTION {
   NOT_FOUND = 'La carrera propocionada no existe',
@@ -9,7 +18,10 @@ export enum CAREERS_EXCEPTION {
 
 @Controller('careers')
 export class CareerController {
-  constructor(private readonly careerService: CareerService) {}
+  constructor(
+    private readonly careerService: CareerService,
+    private readonly userService: AuthService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -17,14 +29,32 @@ export class CareerController {
     return this.careerService.findPaginate(page);
   }
 
-  @Get('all')
-  findAll() {
-    return this.careerService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  CareersById(@Param('id') identification: string) {
+    return this.userService.findAllCareers(identification);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(@Param('id', ParseMongoIdPipe) id: string) {
-    return this.careerService.findOne(id);
+  @Post(':careerId/:userId')
+  addCareer(
+    @Param('careerId', ParseMongoIdPipe) careerId: string,
+    @Param('userId', ParseMongoIdPipe) userId: string,
+  ) {
+    return this.userService.addCareer(careerId, userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':careerId/:userId')
+  removeCareer(
+    @Param('careerId', ParseMongoIdPipe) careerId: string,
+    @Param('userId', ParseMongoIdPipe) userId: string,
+  ) {
+    return this.userService.removeCareer(careerId, userId);
+  }
+
+  @Get('find/all')
+  findAll() {
+    return this.careerService.findAll();
   }
 }

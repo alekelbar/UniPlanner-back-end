@@ -31,6 +31,14 @@ export class TasksController {
     return this.tasksService.findAll(page);
   }
 
+  @Get('delivery/:id')
+  findAllFromDeliverables(
+    @Query('page') page: number = 0,
+    @Param('id', ParseMongoIdPipe) id: string,
+  ) {
+    return this.tasksService.findAllFromDeliverables(page, id);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseMongoIdPipe) id: string) {
     return this.tasksService.findOne(id);

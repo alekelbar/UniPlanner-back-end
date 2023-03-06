@@ -11,7 +11,7 @@ import { DELIVERABLE_STATUS } from '../entities/deliverable.entity';
 
 export class CreateDeliverableDto {
   @IsOptional()
-  _id: string;
+  createdAt: string;
 
   @IsString()
   @MinLength(5)

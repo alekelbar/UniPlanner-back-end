@@ -14,6 +14,7 @@ import { Model } from 'mongoose';
 import { ConfigService } from '@nestjs/config';
 import { CourseDocument } from 'src/courses/entities/course.entity';
 import { Course } from '../courses/entities/course.entity';
+import { Task, TaskDocument } from 'src/task/entities/task.entity';
 
 enum DELIVERABLES_EXCEPTIONS {
   NOT_EXIST = 'deliverable does not exits',
@@ -21,6 +22,7 @@ enum DELIVERABLES_EXCEPTIONS {
   INVALID_SCHEMA = 'data structure has been incorrect(probably, status)',
   VALIDATION_FAILED = 'Validation failed',
   INTERNAL_ERROR = 'internal error',
+  HAS_TASKS = 'has tasks',
 }
 
 @Injectable()
@@ -28,13 +30,18 @@ export class DeliverablesService {
   constructor(
     @InjectModel(Deliverable.name)
     private deliverableModel: Model<DeliverableDocument>,
-    private configService: ConfigService,
     @InjectModel(Course.name)
     private courseModel: Model<CourseDocument>,
+    @InjectModel(Task.name)
+    private taskModel: Model<TaskDocument>,
+    private configService: ConfigService,
   ) {}
 
   async create(createDeliverableDto: CreateDeliverableDto) {
     try {
+      if (!createDeliverableDto.createdAt) {
+        createDeliverableDto.createdAt = Date();
+      }
       const deliverable = await this.deliverableModel.create(
         createDeliverableDto,
       );
@@ -104,7 +111,6 @@ export class DeliverablesService {
       );
 
       return deliverableUpdated;
-      
     } catch (error) {
       if (error._message == DELIVERABLES_EXCEPTIONS.VALIDATION_FAILED) {
         throw new BadRequestException(DELIVERABLES_EXCEPTIONS.INVALID_SCHEMA);
@@ -115,9 +121,13 @@ export class DeliverablesService {
 
   async remove(id: string) {
     // check if deliverable already exist
-
     if (!this.existInDb(id))
       throw new BadRequestException(DELIVERABLES_EXCEPTIONS.NOT_EXIST);
+
+    if ((await this.taskModel.find({ delivery: id })).length) {
+      throw new BadRequestException(DELIVERABLES_EXCEPTIONS.HAS_TASKS);
+    }
+
     try {
       const deliverableDeleted = await this.deliverableModel.findOneAndRemove({
         _id: id,

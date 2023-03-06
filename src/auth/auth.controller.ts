@@ -55,30 +55,6 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('careers/:id')
-  CareersById(@Param('id') identification: string) {
-    return this.userService.findAllCareers(identification);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('careers/:careerId/:userId')
-  addCareer(
-    @Param('careerId', ParseMongoIdPipe) careerId: string,
-    @Param('userId', ParseMongoIdPipe) userId: string,
-  ) {
-    return this.userService.addCareer(careerId, userId);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Delete('careers/:careerId/:userId')
-  removeCareer(
-    @Param('careerId', ParseMongoIdPipe) careerId: string,
-    @Param('userId', ParseMongoIdPipe) userId: string,
-  ) {
-    return this.userService.removeCareer(careerId, userId);
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();

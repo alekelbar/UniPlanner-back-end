@@ -39,6 +39,6 @@ import { Career, CareerSchema } from '../careers/entities/career.entity';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
-  exports: [JwtStrategy, PassportModule, JwtModule],
+  exports: [JwtStrategy, PassportModule, JwtModule, AuthService],
 })
 export class AuthModule {}

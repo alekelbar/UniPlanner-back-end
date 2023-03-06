@@ -1,13 +1,15 @@
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateTaskDto {
+  @IsOptional()
+  _id: string;
+
   @IsString()
-  @MinLength(10)
-  @MaxLength(50)
+  @MinLength(5)
   name: string;
 
   @IsString()
-  @MinLength(15)
+  @MinLength(10)
   descripcion: string;
 
   @IsString()

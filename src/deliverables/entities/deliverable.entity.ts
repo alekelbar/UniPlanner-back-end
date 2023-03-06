@@ -42,7 +42,6 @@ export class Deliverable {
   @Prop({
     required: true,
     type: Date,
-    default: new Date(Date.now()),
   })
   createdAt: Date;
 

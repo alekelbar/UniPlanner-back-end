@@ -4,6 +4,10 @@ import { CareerController } from './career.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Career, CareerSchema } from './entities/career.entity';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from 'src/auth/auth.module';
+import { AuthService } from 'src/auth/auth.service';
+import { User, UserSchema } from 'src/auth/entities/user.entity';
+import { EnconderService } from 'src/common/services/enconder.service';
 
 @Module({
   imports: [
@@ -12,10 +16,15 @@ import { ConfigModule } from '@nestjs/config';
         name: Career.name,
         schema: CareerSchema,
       },
+      {
+        name: User.name,
+        schema: UserSchema,
+      },
     ]),
-    ConfigModule
+    ConfigModule,
+    AuthModule,
   ],
   controllers: [CareerController],
-  providers: [CareerService],
+  providers: [CareerService, AuthService, EnconderService],
 })
 export class CareerModule {}
