@@ -12,23 +12,20 @@ export enum SESSION_TYPES {
 @Schema()
 export class Session {
   @Prop({
-    type: string,
     required: true,
   })
-  name: String; // nombre de la sesión
+  name: string; // nombre de la sesión
 
   @Prop({
-    type: number,
     required: true,
   })
   duration: number; // duración en minutos
 
   @Prop({
-    type: string,
     enum: [SESSION_TYPES.WORKING, SESSION_TYPES.RESTING],
     required: true,
   })
-  type: String; // tipo de sesión; por ejemplo "trabajo" o "descanso"
+  type: string; // tipo de sesión; por ejemplo "trabajo" o "descanso"
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
