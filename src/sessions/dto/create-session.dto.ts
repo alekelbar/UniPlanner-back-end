@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  Min,
   MinLength,
 } from 'class-validator';
 import { SESSION_TYPES } from '../entities/session.entity';
@@ -16,6 +17,7 @@ export class CreateSessionDto {
 
   @IsNumber()
   @IsPositive()
+  @Min(1)
   duration: number; // duración en minutos
 
   @IsString()
