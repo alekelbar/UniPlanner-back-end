@@ -10,6 +10,13 @@ export enum DELIVERABLE_STATUS {
   PENDING = 'Pendiente',
 }
 
+export enum DELIVERABLE_TAGS {
+  IMPORTANT = 'IMPORTANTE',
+  URGENT = 'URGENTE',
+  NOT_IMPORTANT = 'NO IMPORTANTE',
+  NOT_URGENT = 'NO URGENTE',
+}
+
 @Schema()
 export class Deliverable {
   @Prop({
@@ -56,6 +63,18 @@ export class Deliverable {
     ref: 'courses',
   })
   course: Course;
+
+  @Prop({
+    required: true,
+    enum: [DELIVERABLE_TAGS.IMPORTANT, DELIVERABLE_TAGS.NOT_IMPORTANT],
+  })
+  importance: string;
+
+  @Prop({
+    required: true,
+    enum: [DELIVERABLE_TAGS.URGENT, DELIVERABLE_TAGS.NOT_URGENT],
+  })
+  urgency: string;
 }
 
 export const DeliverableSchema = SchemaFactory.createForClass(Deliverable);

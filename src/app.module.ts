@@ -10,6 +10,7 @@ import { CoursesModule } from './courses/courses.module';
 import { DeliverablesModule } from './deliverables/deliverables.module';
 import { TasksModule } from './task/tasks.module';
 import { SessionsModule } from './sessions/sessions.module';
+import { UserSettingsModule } from './user-settings/user-settings.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SessionsModule } from './sessions/sessions.module';
     DeliverablesModule,
     TasksModule,
     SessionsModule,
+    UserSettingsModule,
   ],
 })
 export class AppModule {}

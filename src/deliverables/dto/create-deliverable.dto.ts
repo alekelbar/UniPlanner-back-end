@@ -7,7 +7,7 @@ import {
   IsEnum,
   IsOptional,
 } from 'class-validator';
-import { DELIVERABLE_STATUS } from '../entities/deliverable.entity';
+import { DELIVERABLE_STATUS, DELIVERABLE_TAGS } from '../entities/deliverable.entity';
 
 export class CreateDeliverableDto {
   @IsOptional()
@@ -30,6 +30,14 @@ export class CreateDeliverableDto {
   @IsString()
   @IsEnum(DELIVERABLE_STATUS)
   status: string;
+
+  @IsString()
+  @IsEnum(DELIVERABLE_TAGS)
+  importance: string;
+
+  @IsString()
+  @IsEnum(DELIVERABLE_TAGS)
+  urgency: string;
 
   @IsNumber()
   note: number;

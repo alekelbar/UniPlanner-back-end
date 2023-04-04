@@ -1,0 +1,29 @@
+[
+  {
+    "user": "63f6640fd384c4f5c109fa59",
+    "importance": 3,
+    "urgency": 1,
+    "do": "#f10909",
+    "prepare": "#093fe1",
+    "delegate": "#00e62e",
+    "ignore": "#e9d60c"
+  },
+  {
+    "user": "63f793a193395d6af5bbc3bd",
+    "importance": 3,
+    "urgency": 1,
+    "do": "#f10909",
+    "prepare": "#093fe1",
+    "delegate": "#00e62e",
+    "ignore": "#e9d60c"
+  },
+  {
+    "user": "63fbdcf73f83202fb2d57b7e",
+    "importance": 3,
+    "urgency": 1,
+    "do": "#f10909",
+    "prepare": "#093fe1",
+    "delegate": "#00e62e",
+    "ignore": "#e9d60c"
+  }
+]

@@ -16,7 +16,7 @@ import { Career, CareerDocument } from '../careers/entities/career.entity';
 import { CAREERS_EXCEPTION } from '../careers/career.controller';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-enum USER_EXCEPTIONS {
+export enum USER_EXCEPTIONS {
   NOT_FOUND = 'USER Not Found',
   ALREADY_EXISTS = 'USER Already Exists',
   INTERNAL_ERROR = 'Tuvimos un error en el servidor',
