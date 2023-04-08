@@ -53,14 +53,10 @@ export class UserSettingsService {
 
   async update(id: string, updateUserSettingDto: UpdateUserSettingDto) {
     try {
-      const userExist = await this.userModel.find({ _id: id });
-      if (!userExist) {
-        throw new NotFoundException(USER_EXCEPTIONS.NOT_FOUND);
-      }
-
       return await this.settingModel.findOneAndUpdate(
-        { user: id },
+        { _id: id },
         updateUserSettingDto,
+        { new: true },
       );
     } catch (error) {
       throw new InternalServerErrorException();

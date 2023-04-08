@@ -1,6 +1,15 @@
-import { IsHexColor, IsMongoId, IsNumber, IsString } from 'class-validator';
+import {
+  IsHexColor,
+  IsMongoId,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateUserSettingDto {
+  @IsOptional()
+  _id: string;
+
   @IsString()
   @IsMongoId()
   user: string;
