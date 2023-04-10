@@ -26,5 +26,6 @@ import { EnconderService } from 'src/common/services/enconder.service';
   ],
   controllers: [CareerController],
   providers: [CareerService, AuthService, EnconderService],
+  exports: [CareerService], // si se necesita utilizar en otros módulos
 })
 export class CareerModule {}

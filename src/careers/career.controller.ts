@@ -7,10 +7,11 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
+import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 import { CareerService } from './career.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
+import { Career } from './entities/career.entity';
 
 export enum CAREERS_EXCEPTION {
   NOT_FOUND = 'La carrera propocionada no existe',
@@ -40,7 +41,7 @@ export class CareerController {
   addCareer(
     @Param('careerId', ParseMongoIdPipe) careerId: string,
     @Param('userId', ParseMongoIdPipe) userId: string,
-  ) {
+  ): Promise<Career> {
     return this.userService.addCareer(careerId, userId);
   }
 
@@ -49,7 +50,7 @@ export class CareerController {
   removeCareer(
     @Param('careerId', ParseMongoIdPipe) careerId: string,
     @Param('userId', ParseMongoIdPipe) userId: string,
-  ) {
+  ): Promise<Career> {
     return this.userService.removeCareer(careerId, userId);
   }
 

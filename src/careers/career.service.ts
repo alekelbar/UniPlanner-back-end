@@ -16,7 +16,6 @@ export class CareerService {
     private configService: ConfigService,
   ) {}
 
-
   findPaginate(page: number) {
     return this.careerModel
       .find()
@@ -24,8 +23,8 @@ export class CareerService {
       .skip(this.configService.get('skipPerPage') * page);
   }
 
-  findAll() {
-    return this.careerModel.find();
+  async findAll(): Promise<Career[]> {
+    return this.careerModel.find().exec();
   }
 
   async findOne(id: string) {

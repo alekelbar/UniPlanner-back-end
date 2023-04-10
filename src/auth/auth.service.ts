@@ -62,10 +62,12 @@ export class AuthService {
   }
 
   async removeCareer(careerId: string, userId: string) {
-    const career = await this.careerModel.findById(careerId);
+    const career = await this.careerModel.findById(careerId).exec();
+
     if (!career) {
       throw new BadRequestException(CAREERS_EXCEPTION.NOT_FOUND);
     }
+
     const user = await this.userModel.findById(userId);
     if (!user) {
       throw new BadRequestException(USER_EXCEPTIONS.NOT_FOUND);
@@ -77,14 +79,15 @@ export class AuthService {
         { $pull: { careers: careerId } },
       );
 
-      return career;
+      return { name: career.name };
     } catch (error) {
       throw new InternalServerErrorException(USER_EXCEPTIONS.INTERNAL_ERROR);
     }
   }
 
-  async addCareer(careerId: string, userId: string) {
-    const career = await this.careerModel.findById(careerId);
+  async addCareer(careerId: string, userId: string): Promise<Career> {
+    const career = await this.careerModel.findById(careerId).exec();
+
     if (!career) {
       throw new BadRequestException(CAREERS_EXCEPTION.NOT_FOUND);
     }
@@ -99,7 +102,7 @@ export class AuthService {
         { $push: { careers: careerId } },
       );
 
-      return career;
+      return { name: career.name };
     } catch (error) {
       throw new InternalServerErrorException(USER_EXCEPTIONS.INTERNAL_ERROR);
     }
@@ -119,7 +122,14 @@ export class AuthService {
     );
 
     try {
-      return await Promise.all(careers);
+      const data = await Promise.all(careers);
+
+      return data.map((career) => {
+        return {
+          name: career.name,
+          _id: career._id.toString(),
+        };
+      });
     } catch (error) {
       throw new InternalServerErrorException();
     }

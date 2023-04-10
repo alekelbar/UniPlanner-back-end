@@ -29,8 +29,14 @@ export class CoursesService {
     private configService: ConfigService,
   ) {}
 
-  async findAllFromUser(page: number, idUser: string, idCareer: string) {
-
+  async findAllFromUser(
+    page: number,
+    idUser: string,
+    idCareer: string,
+  ): Promise<{
+    count: number;
+    courses: Course[];
+  }> {
     try {
       const courses = await this.courseModel
         .find({ user: idUser, career: idCareer })
@@ -57,7 +63,7 @@ export class CoursesService {
     }
   }
 
-  async create(createCourseDto: CreateCourseDto) {
+  async create(createCourseDto: CreateCourseDto): Promise<Course> {
     // check if the user exits
     const user = await this.userModel.findById(createCourseDto.user);
 
@@ -73,7 +79,14 @@ export class CoursesService {
 
     try {
       // create the course
-      return await this.courseModel.create(createCourseDto);
+      const createdCourse = await this.courseModel.create(createCourseDto);
+      return {
+        career: createdCourse.career,
+        courseDescription: createCourseDto.courseDescription,
+        credits: createdCourse.credits,
+        name: createCourseDto.name,
+        user: createdCourse.user,
+      };
     } catch (error) {
       if (error.code == 11000) {
         throw new BadRequestException('this course already exits');
