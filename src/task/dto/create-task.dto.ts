@@ -2,7 +2,7 @@ import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateTaskDto {
   @IsOptional()
-  _id: string;
+  _id?: string;
 
   @IsString()
   @MinLength(5)
