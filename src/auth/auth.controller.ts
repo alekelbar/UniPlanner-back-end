@@ -1,21 +1,17 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
-  Delete,
-  Req,
-  HttpCode,
-  HttpStatus,
+  Patch,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { RegisterUserDto } from './dto/register-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UseGuards } from '@nestjs/common';
 import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
+import { AuthService } from './auth.service';
+import { LoginUserDto } from './dto/login-user.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('auth')
@@ -33,11 +29,9 @@ export class AuthController {
     return this.userService.findOneByIdentification(ID);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('validate')
-  @HttpCode(HttpStatus.OK)
-  checkToken() {
-    return this.userService.checkToken();
+  @Get('validate/:id')
+  checkToken(@Param('id') token: string) {
+    return this.userService.checkToken(token);
   }
 
   @Post('login')

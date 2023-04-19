@@ -4,17 +4,17 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { RegisterUserDto } from './dto/register-user.dto';
-import { User, userDocument } from './entities/user.entity';
-import { Model } from 'mongoose';
-import { LoginUserDto } from './dto/login-user.dto';
-import { EnconderService } from '../common/services/enconder.service';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './interfaces/jwtPayload.interface';
-import { Career, CareerDocument } from '../careers/entities/career.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CAREERS_EXCEPTION } from '../careers/career.controller';
+import { Career, CareerDocument } from '../careers/entities/career.entity';
+import { EnconderService } from '../common/services/enconder.service';
+import { LoginUserDto } from './dto/login-user.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User, userDocument } from './entities/user.entity';
+import { JwtPayload } from './interfaces/jwtPayload.interface';
 
 export enum USER_EXCEPTIONS {
   NOT_FOUND = 'USER Not Found',
@@ -31,10 +31,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  checkToken() {
-    return {
-      ok: true,
-    };
+  async checkToken(token: string) {
+    try {
+      await this.jwtService.verifyAsync(token);
+      return { ok: true };
+    } catch (error) {
+      return { ok: false };
+    }
   }
 
   async updateUser(updateUserDto: UpdateUserDto, id: string) {
