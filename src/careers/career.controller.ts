@@ -7,10 +7,10 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { AuthService } from '../auth/auth.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 import { CareerService } from './career.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { AuthService } from '../auth/auth.service';
 import { Career } from './entities/career.entity';
 
 export enum CAREERS_EXCEPTION {
@@ -32,8 +32,8 @@ export class CareerController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  CareersById(@Param('id') identification: string) {
-    return this.userService.findAllCareers(identification);
+  CareersById(@Param('id', ParseMongoIdPipe) id: string) {
+    return this.userService.findAllCareers(id);
   }
 
   @UseGuards(JwtAuthGuard)

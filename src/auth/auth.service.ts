@@ -111,8 +111,8 @@ export class AuthService {
     }
   }
 
-  async findAllCareers(identification: string) {
-    const user = await this.findOneByIdentification(identification);
+  async findAllCareers(id: string) {
+    const user = await this.userModel.findById(id);
 
     if (!user) {
       throw new BadRequestException(USER_EXCEPTIONS.NOT_FOUND);
