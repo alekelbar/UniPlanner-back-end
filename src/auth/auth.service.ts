@@ -40,7 +40,7 @@ export class AuthService {
     }
   }
 
-  async updateUser(updateUserDto: UpdateUserDto, id: string) {
+  async updateUser(updateUserDto: UpdateUserDto, id: string): Promise<User> {
     const exists = await this.userModel.find({ _id: id });
 
     if (!exists) {
@@ -55,6 +55,7 @@ export class AuthService {
           new: true,
         },
       );
+
       return user;
     } catch (error: any) {
       if (error.code === 11000) {
@@ -64,7 +65,7 @@ export class AuthService {
     }
   }
 
-  async removeCareer(careerId: string, userId: string) {
+  async removeCareer(careerId: string, userId: string): Promise<Career> {
     const career = await this.careerModel.findById(careerId).exec();
 
     if (!career) {
@@ -82,7 +83,7 @@ export class AuthService {
         { $pull: { careers: careerId } },
       );
 
-      return { name: career.name };
+      return career;
     } catch (error) {
       throw new InternalServerErrorException(USER_EXCEPTIONS.INTERNAL_ERROR);
     }
@@ -105,7 +106,7 @@ export class AuthService {
         { $push: { careers: careerId } },
       );
 
-      return { name: career.name };
+      return career;
     } catch (error) {
       throw new InternalServerErrorException(USER_EXCEPTIONS.INTERNAL_ERROR);
     }

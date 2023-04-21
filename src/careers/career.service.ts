@@ -1,13 +1,11 @@
 import {
-  BadRequestException,
-  Inject,
   Injectable,
-  NotFoundException,
+  NotFoundException
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Career, CareerDocument } from './entities/career.entity';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CareerService {
@@ -27,13 +25,12 @@ export class CareerService {
     return this.careerModel.find().exec();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Career> {
     const career = await this.careerModel.findById(id);
 
     if (!career) {
       throw new NotFoundException('career not found');
     }
-
     return career;
   }
 }

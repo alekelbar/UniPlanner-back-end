@@ -3,16 +3,16 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserSettingDto } from './dto/create-user-setting.dto';
-import { UpdateUserSettingDto } from './dto/update-user-setting.dto';
-import { User, userDocument } from 'src/auth/entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { USER_EXCEPTIONS } from 'src/auth/auth.service';
+import { User, userDocument } from 'src/auth/entities/user.entity';
+import { CreateUserSettingDto } from './dto/create-user-setting.dto';
+import { UpdateUserSettingDto } from './dto/update-user-setting.dto';
 import {
   UserSetting,
   userSettingsDocuments,
 } from './entities/user-setting.entity';
-import { USER_EXCEPTIONS } from 'src/auth/auth.service';
 
 @Injectable()
 export class UserSettingsService {
@@ -22,7 +22,9 @@ export class UserSettingsService {
     private settingModel: Model<userSettingsDocuments>,
   ) {}
 
-  async create(createUserSettingDto: CreateUserSettingDto) {
+  async create(
+    createUserSettingDto: CreateUserSettingDto,
+  ): Promise<UserSetting> {
     try {
       const { user } = createUserSettingDto;
 
@@ -37,7 +39,7 @@ export class UserSettingsService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<UserSetting> {
     try {
       const userExist = await this.userModel.find({ _id: id });
 
@@ -51,7 +53,10 @@ export class UserSettingsService {
     }
   }
 
-  async update(id: string, updateUserSettingDto: UpdateUserSettingDto) {
+  async update(
+    id: string,
+    updateUserSettingDto: UpdateUserSettingDto,
+  ): Promise<UserSetting> {
     try {
       return await this.settingModel.findOneAndUpdate(
         { _id: id },

@@ -1,20 +1,20 @@
 import {
-  Injectable,
   BadRequestException,
+  Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CourseDocument } from 'src/courses/entities/course.entity';
+import { Task, TaskDocument } from 'src/task/entities/task.entity';
+import { Course } from '../courses/entities/course.entity';
 import { CreateDeliverableDto } from './dto/create-deliverable.dto';
 import { UpdateDeliverableDto } from './dto/update-deliverable.dto';
 import {
   Deliverable,
   DeliverableDocument,
 } from './entities/deliverable.entity';
-import { Model } from 'mongoose';
-import { ConfigService } from '@nestjs/config';
-import { CourseDocument } from 'src/courses/entities/course.entity';
-import { Course } from '../courses/entities/course.entity';
-import { Task, TaskDocument } from 'src/task/entities/task.entity';
 
 enum DELIVERABLES_EXCEPTIONS {
   NOT_EXIST = 'deliverable does not exits',
@@ -37,15 +37,14 @@ export class DeliverablesService {
     private configService: ConfigService,
   ) {}
 
-  async create(createDeliverableDto: CreateDeliverableDto) {
+  async create(
+    createDeliverableDto: CreateDeliverableDto,
+  ): Promise<Deliverable> {
     try {
       if (!createDeliverableDto.createdAt) {
         createDeliverableDto.createdAt = Date();
       }
-      const deliverable = await this.deliverableModel.create(
-        createDeliverableDto,
-      );
-      return deliverable;
+      return await this.deliverableModel.create(createDeliverableDto);
     } catch (error) {
       throw new InternalServerErrorException(
         DELIVERABLES_EXCEPTIONS.INTERNAL_ERROR,
@@ -53,14 +52,11 @@ export class DeliverablesService {
     }
   }
 
-  async findAll(page: number) {
-    const deliverables = await this.deliverableModel
+  async findAll(page: number): Promise<Deliverable[]> {
+    return await this.deliverableModel
       .find()
       .limit(this.configService.get('limitPerPage'))
       .skip(this.configService.get('skipPerPage') * page);
-
-    if (!deliverables) throw new InternalServerErrorException();
-    return deliverables;
   }
 
   async findAllFromCourse(id: string, page: number) {
@@ -71,12 +67,13 @@ export class DeliverablesService {
       if (!course)
         throw new BadRequestException(DELIVERABLES_EXCEPTIONS.COURSE_NOT_FOUND);
 
-      const deliverables = await this.deliverableModel
-        .find({ course: id })
-        .limit(this.configService.get('limitPerPage'))
-        .skip(this.configService.get('skipPerPage') * page);
+      const limit = this.configService.get('limitPerPage');
+      const skip = this.configService.get('skipPerPage') * page;
 
-      const count = (await this.deliverableModel.find({ course: id })).length;
+      const [deliverables, count] = await Promise.all([
+        this.deliverableModel.find({ course: id }).limit(limit).skip(skip),
+        this.deliverableModel.countDocuments({ course: id }),
+      ]);
 
       return {
         count,
@@ -89,7 +86,7 @@ export class DeliverablesService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Deliverable> {
     const deliverable = await this.deliverableModel.findById(id);
 
     if (!deliverable)
@@ -98,19 +95,20 @@ export class DeliverablesService {
     return deliverable;
   }
 
-  async update(id: string, updateDeliverableDto: UpdateDeliverableDto) {
+  async update(
+    id: string,
+    updateDeliverableDto: UpdateDeliverableDto,
+  ): Promise<Deliverable> {
     // check if deliverable already exist
     if (!this.existInDb(id))
       throw new BadRequestException(DELIVERABLES_EXCEPTIONS.NOT_EXIST);
 
     try {
-      const deliverableUpdated = await this.deliverableModel.findOneAndUpdate(
+      return await this.deliverableModel.findOneAndUpdate(
         { _id: id },
         updateDeliverableDto,
         { new: true, runValidators: true },
       );
-
-      return deliverableUpdated;
     } catch (error) {
       if (error._message == DELIVERABLES_EXCEPTIONS.VALIDATION_FAILED) {
         throw new BadRequestException(DELIVERABLES_EXCEPTIONS.INVALID_SCHEMA);
@@ -119,7 +117,7 @@ export class DeliverablesService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<Deliverable> {
     // check if deliverable already exist
     if (!this.existInDb(id))
       throw new BadRequestException(DELIVERABLES_EXCEPTIONS.NOT_EXIST);
@@ -129,10 +127,9 @@ export class DeliverablesService {
     }
 
     try {
-      const deliverableDeleted = await this.deliverableModel.findOneAndRemove({
+      return await this.deliverableModel.findOneAndRemove({
         _id: id,
       });
-      return deliverableDeleted;
     } catch (error) {
       throw new InternalServerErrorException(
         DELIVERABLES_EXCEPTIONS.INTERNAL_ERROR,

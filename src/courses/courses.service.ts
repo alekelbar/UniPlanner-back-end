@@ -4,18 +4,18 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
-import { Course, CourseDocument } from './entities/course.entity';
 import { Model } from 'mongoose';
 import { User, userDocument } from '../auth/entities/user.entity';
 import { Career, CareerDocument } from '../careers/entities/career.entity';
-import { ConfigService } from '@nestjs/config';
 import {
   Deliverable,
   DeliverableDocument,
 } from '../deliverables/entities/deliverable.entity';
+import { CreateCourseDto } from './dto/create-course.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
+import { Course, CourseDocument } from './entities/course.entity';
 
 @Injectable()
 export class CoursesService {
@@ -38,21 +38,20 @@ export class CoursesService {
     courses: Course[];
   }> {
     try {
-      const courses = await this.courseModel
-        .find({ user: idUser, career: idCareer })
-        .limit(this.configService.get('limitPerPage'))
-        .skip(this.configService.get('skipPerPage') * page);
+      const limit = this.configService.get('limitPerPage');
+      const skip = this.configService.get('skipPerPage') * page;
+
+      const [courses, count] = await Promise.all([
+        this.courseModel
+          .find({ user: idUser, career: idCareer })
+          .limit(limit)
+          .skip(skip),
+        this.courseModel.countDocuments({ user: idUser, career: idCareer }),
+      ]);
 
       if (!courses) {
         throw new NotFoundException('No courses found');
       }
-
-      const count = (
-        await this.courseModel.find({
-          user: idUser,
-          career: idCareer,
-        })
-      ).length;
 
       return {
         count,
@@ -79,14 +78,7 @@ export class CoursesService {
 
     try {
       // create the course
-      const createdCourse = await this.courseModel.create(createCourseDto);
-      return {
-        career: createdCourse.career,
-        courseDescription: createCourseDto.courseDescription,
-        credits: createdCourse.credits,
-        name: createCourseDto.name,
-        user: createdCourse.user,
-      };
+      return await this.courseModel.create(createCourseDto);
     } catch (error) {
       if (error.code == 11000) {
         throw new BadRequestException('this course already exits');
@@ -128,26 +120,21 @@ export class CoursesService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<Course> {
     if (!(await this.courseModel.findById(id))) {
       throw new NotFoundException(
         'Could not be deleted, because the course does not exist',
       );
     }
 
-    // verificar que no existen entregables vinculados a la carrera
     const deliverables = await this.deliverableModel.find({ course: id });
+    
     if (deliverables.length > 0) {
       throw new BadRequestException(
         'Could not be deleted, because the course has deliverables',
       );
     }
 
-    const removeItem = await this.courseModel.findOneAndRemove({ _id: id });
-    if (!removeItem) {
-      throw new InternalServerErrorException();
-    }
-
-    return removeItem;
+    return await this.courseModel.findOneAndRemove({ _id: id });
   }
 }
