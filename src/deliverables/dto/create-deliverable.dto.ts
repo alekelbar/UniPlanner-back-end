@@ -6,6 +6,8 @@ import {
   IsMongoId,
   IsEnum,
   IsOptional,
+  Min,
+  Max,
 } from 'class-validator';
 import { DELIVERABLE_STATUS, DELIVERABLE_TAGS } from '../entities/deliverable.entity';
 
@@ -17,11 +19,9 @@ export class CreateDeliverableDto {
   createdAt: string;
 
   @IsString()
-  @MinLength(5)
   name: string;
 
   @IsString()
-  @MinLength(10)
   description: string;
 
   @IsDate()
@@ -40,9 +40,12 @@ export class CreateDeliverableDto {
   urgency: string;
 
   @IsNumber()
+  @Min(0)
   note: number;
 
   @IsNumber()
+  @Min(0)
+  @Max(100)
   percent: number;
 
   @IsMongoId()

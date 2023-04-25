@@ -5,7 +5,6 @@ import {
   IsEmail,
   IsMongoId,
   IsString,
-  MaxLength,
   MinLength,
 } from 'class-validator';
 
@@ -17,7 +16,6 @@ export class RegisterUserDto {
   identification: string;
 
   @IsString()
-  @MinLength(8)
   fullname: string;
 
   @IsEmail()

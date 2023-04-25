@@ -13,5 +13,4 @@ export class LoginUserDto {
   @MinLength(8)
   @IsAlphanumeric()
   password: string;
-
 }

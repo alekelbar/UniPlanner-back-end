@@ -71,7 +71,11 @@ export class DeliverablesService {
       const skip = this.configService.get('skipPerPage') * page;
 
       const [deliverables, count] = await Promise.all([
-        this.deliverableModel.find({ course: id }).limit(limit).skip(skip),
+        this.deliverableModel
+          .find({ course: id })
+          .sort({ createdAt: -1 }) // Ordenar por fecha de creación descendente
+          .limit(limit)
+          .skip(skip),
         this.deliverableModel.countDocuments({ course: id }),
       ]);
 

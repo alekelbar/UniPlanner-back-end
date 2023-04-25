@@ -12,7 +12,6 @@ import { SESSION_TYPES } from '../entities/session.entity';
 
 export class CreateSessionDto {
   @IsString()
-  @MinLength(5)
   name: String; // nombre de la sesión
 
   @IsNumber()

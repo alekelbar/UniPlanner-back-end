@@ -14,7 +14,6 @@ import { UpdateUserSettingDto } from './dto/update-user-setting.dto';
 import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
 @Controller('user-settings')
 export class UserSettingsController {
   constructor(private readonly userSettingsService: UserSettingsService) {}
@@ -24,11 +23,13 @@ export class UserSettingsController {
     return this.userSettingsService.create(createUserSettingDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id', ParseMongoIdPipe) id: string) {
     return this.userSettingsService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id', ParseMongoIdPipe) id: string,
