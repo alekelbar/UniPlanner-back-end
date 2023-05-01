@@ -14,6 +14,8 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Query } from '@nestjs/common';
+import { string } from 'joi';
+import { Course } from './entities/course.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('courses')
@@ -23,6 +25,11 @@ export class CoursesController {
   @Post()
   create(@Body() createCourseDto: CreateCourseDto) {
     return this.coursesService.create(createCourseDto);
+  }
+
+  @Get('grade/:courseId')
+  getGradesById(@Param('courseId', ParseMongoIdPipe) courseId: string) {
+    return this.coursesService.getGradesById(courseId);
   }
 
   @Get()

@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { User, userDocument } from '../auth/entities/user.entity';
 import { Career, CareerDocument } from '../careers/entities/career.entity';
 import {
+  DELIVERABLE_STATUS,
   Deliverable,
   DeliverableDocument,
 } from '../deliverables/entities/deliverable.entity';
@@ -19,7 +20,6 @@ import { Course, CourseDocument } from './entities/course.entity';
 
 @Injectable()
 export class CoursesService {
-  // }
   constructor(
     @InjectModel(Course.name) private courseModel: Model<CourseDocument>,
     @InjectModel(User.name) private userModel: Model<userDocument>,
@@ -28,6 +28,29 @@ export class CoursesService {
     private deliverableModel: Model<DeliverableDocument>,
     private configService: ConfigService,
   ) {}
+
+  // Get grade from an course
+  async getGradesById(courseId: string): Promise<{ totalGrade: number }> {
+    const course = await this.courseModel.findById(courseId);
+
+    if (!course) throw new NotFoundException();
+
+    const deliverables = await this.deliverableModel.find({
+      $and: [{ course: courseId }, { status: DELIVERABLE_STATUS.SEND }],
+    });
+
+    let totalGrade = 0;
+    deliverables.forEach((deliverary) => {
+      // calcular el porcentaje obtenido...
+      const grade = (deliverary.note / 100) * deliverary.percent;
+      // sumarlo al total del curso...
+      totalGrade += grade;
+    });
+
+    return {
+      totalGrade,
+    };
+  }
 
   async findAllFromUser(
     page: number,
@@ -94,7 +117,7 @@ export class CoursesService {
       .skip(this.configService.get('skipPerPage') * page);
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Course> {
     const course = await this.courseModel.findById(id);
     if (!course) {
       throw new NotFoundException('not found');
@@ -128,7 +151,7 @@ export class CoursesService {
     }
 
     const deliverables = await this.deliverableModel.find({ course: id });
-    
+
     if (deliverables.length > 0) {
       throw new BadRequestException(
         'Could not be deleted, because the course has deliverables',
