@@ -15,10 +15,10 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task, TaskDocument } from './entities/task.entity';
 
 enum TASK_EXCEPTIONS {
-  NOT_EXIST = 'Task does not exist',
-  INVALID_TASK = 'Task validation failed',
-  DELIVERABLE_NOT_FOUND = 'DELIVERABLE not found',
-  INTERNAL_ERROR = 'Internal error',
+  NOT_EXIST = 'No se encontro el recurso',
+  INVALID_TASK = 'Error de validación',
+  DELIVERABLE_NOT_FOUND = 'No se encontro el entregable correspondiente',
+  INTERNAL_ERROR = 'Error interno',
 }
 
 @Injectable()

@@ -17,9 +17,9 @@ import { User, userDocument } from './entities/user.entity';
 import { JwtPayload } from './interfaces/jwtPayload.interface';
 
 export enum USER_EXCEPTIONS {
-  NOT_FOUND = 'USER Not Found',
-  ALREADY_EXISTS = 'USER Already Exists',
-  INTERNAL_ERROR = 'Tuvimos un error en el servidor',
+  NOT_FOUND = 'No se encontro el usuario',
+  ALREADY_EXISTS = 'Este usuario ya se encuentra registrado',
+  INTERNAL_ERROR = 'error interno',
 }
 
 @Injectable()

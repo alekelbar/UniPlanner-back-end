@@ -146,7 +146,7 @@ export class CoursesService {
   async remove(id: string): Promise<Course> {
     if (!(await this.courseModel.findById(id))) {
       throw new NotFoundException(
-        'Could not be deleted, because the course does not exist',
+        'No es posible eliminarlo, porque el curso no existe',
       );
     }
 
@@ -154,7 +154,7 @@ export class CoursesService {
 
     if (deliverables.length > 0) {
       throw new BadRequestException(
-        'Could not be deleted, because the course has deliverables',
+        'Todavía tiene entregas pendientes',
       );
     }
 

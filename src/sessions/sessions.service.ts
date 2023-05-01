@@ -11,9 +11,9 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { Session, SessionDocument } from './entities/session.entity';
 
 export enum SESSION_EXCEPTIONS {
-  USER_NOT_FOUND = 'User not found',
-  INTERNAL_SERVER_ERROR = 'Internal Server Error',
-  NOT_FOUND = 'Not Found',
+  USER_NOT_FOUND = 'No se encontro al usuario',
+  INTERNAL_SERVER_ERROR = 'Error interno',
+  NOT_FOUND = 'No se encontro el recurso',
 }
 
 @Injectable()
@@ -71,7 +71,7 @@ export class SessionsService {
       if (!(await this.sessionModel.findById(id))) {
         throw new BadRequestException(SESSION_EXCEPTIONS.NOT_FOUND);
       }
-      
+
       return this.sessionModel.findByIdAndDelete(id);
     } catch (error) {
       throw new InternalServerErrorException(

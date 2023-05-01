@@ -17,12 +17,12 @@ import {
 } from './entities/deliverable.entity';
 
 enum DELIVERABLES_EXCEPTIONS {
-  NOT_EXIST = 'deliverable does not exits',
-  COURSE_NOT_FOUND = 'course does not exist',
-  INVALID_SCHEMA = 'data structure has been incorrect(probably, status)',
-  VALIDATION_FAILED = 'Validation failed',
-  INTERNAL_ERROR = 'internal error',
-  HAS_TASKS = 'has tasks',
+  NOT_EXIST = 'No fue posible eliminarlo, no se encontro el entregable',
+  COURSE_NOT_FOUND = 'No se encontro el curso',
+  INVALID_SCHEMA = 'El esquema de datos enviado es invalido',
+  VALIDATION_FAILED = 'Error de validación',
+  INTERNAL_ERROR = 'Erro interno',
+  HAS_TASKS = 'Tiene algunas tareas pendientes',
 }
 
 @Injectable()
