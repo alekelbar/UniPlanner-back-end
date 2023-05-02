@@ -11,6 +11,7 @@ import {
 import { SessionsService } from './sessions.service';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 
 @Controller('sessions')
 export class SessionsController {
@@ -22,12 +23,12 @@ export class SessionsController {
   }
 
   @Get(':id')
-  findAllFromUser(@Param('id') id: string, @Query('page') page: number) {
+  findAllFromUser(@Param('id', ParseMongoIdPipe) id: string, @Query('page') page: number) {
     return this.sessionsService.findAllFromUser(id, page);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseMongoIdPipe) id: string) {
     return this.sessionsService.remove(id);
   }
 }
