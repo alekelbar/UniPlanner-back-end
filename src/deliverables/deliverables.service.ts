@@ -52,11 +52,8 @@ export class DeliverablesService {
     }
   }
 
-  async findAll(page: number): Promise<Deliverable[]> {
-    return await this.deliverableModel
-      .find()
-      .limit(this.configService.get('limitPerPage'))
-      .skip(this.configService.get('skipPerPage') * page);
+  async findAll(course: string): Promise<Deliverable[]> {
+    return await this.deliverableModel.find({ course });
   }
 
   async findAllFromCourse(id: string, page: number) {

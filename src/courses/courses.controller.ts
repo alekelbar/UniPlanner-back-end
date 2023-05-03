@@ -32,9 +32,12 @@ export class CoursesController {
     return this.coursesService.getGradesById(courseId);
   }
 
-  @Get()
-  findAll(@Query('page') page: number = 0) {
-    return this.coursesService.findAll(page);
+  @Get('all/:user/:career')
+  findAll(
+    @Param('user', ParseMongoIdPipe) user: string,
+    @Param('career', ParseMongoIdPipe) career: string,
+  ) {
+    return this.coursesService.findAll(user, career);
   }
 
   @Get('user/:idUser/career/:idCareer')

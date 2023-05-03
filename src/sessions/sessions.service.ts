@@ -24,6 +24,10 @@ export class SessionsService {
     private configService: ConfigService,
   ) {}
 
+  async getAll(user: string) {
+    return await this.sessionModel.find({ user });
+  }
+
   async create(createSessionDto: CreateSessionDto): Promise<Session> {
     const user = await this.userModel.findById(createSessionDto.user);
     if (!user) {

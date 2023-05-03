@@ -2,15 +2,12 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Patch,
-  Param,
+  Body, Param,
   Delete,
-  Query,
+  Query
 } from '@nestjs/common';
 import { SessionsService } from './sessions.service';
 import { CreateSessionDto } from './dto/create-session.dto';
-import { UpdateSessionDto } from './dto/update-session.dto';
 import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 
 @Controller('sessions')
@@ -23,8 +20,16 @@ export class SessionsController {
   }
 
   @Get(':id')
-  findAllFromUser(@Param('id', ParseMongoIdPipe) id: string, @Query('page') page: number) {
+  findAllFromUser(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @Query('page') page: number,
+  ) {
     return this.sessionsService.findAllFromUser(id, page);
+  }
+
+  @Get('all/:user')
+  getAll(@Param('user', ParseMongoIdPipe) user: string){
+    return this.sessionsService.getAll(user);
   }
 
   @Delete(':id')

@@ -66,11 +66,8 @@ export class TasksService {
     }
   }
 
-  async findAll(page: number): Promise<Task[]> {
-    return await this.taskModel
-      .find()
-      .limit(this.configService.get('limitPerPage'))
-      .skip(this.configService.get('skipPerPage') * page);
+  async findAll(delivery: string): Promise<Task[]> {
+    return await this.taskModel.find({ delivery });
   }
 
   async findOne(id: string): Promise<Task> {

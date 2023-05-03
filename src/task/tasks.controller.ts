@@ -15,7 +15,6 @@ import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Query } from '@nestjs/common';
 
-
 @UseGuards(JwtAuthGuard)
 @Controller('tasks')
 export class TasksController {
@@ -26,9 +25,9 @@ export class TasksController {
     return this.tasksService.create(createTaskDto);
   }
 
-  @Get()
-  findAll(@Query('page') page: number = 0) {
-    return this.tasksService.findAll(page);
+  @Get('all/:delivery')
+  findAll(@Param('delivery', ParseMongoIdPipe) delivery: string) {
+    return this.tasksService.findAll(delivery);
   }
 
   @Get('delivery/:id')

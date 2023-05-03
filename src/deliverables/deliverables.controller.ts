@@ -28,9 +28,10 @@ export class DeliverablesController {
     return this.deliverablesService.create(createDeliverableDto);
   }
 
-  @Get()
-  findAll(@Query('page') page: number = 0) {
-    return this.deliverablesService.findAll(page);
+  @UseGuards(JwtAuthGuard)
+  @Get('all/:course')
+  findAll(@Param('course', ParseMongoIdPipe) course: string) {
+    return this.deliverablesService.findAll(course);
   }
 
   @Get('course/:id')

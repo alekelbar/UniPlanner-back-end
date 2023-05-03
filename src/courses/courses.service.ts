@@ -110,11 +110,8 @@ export class CoursesService {
     }
   }
 
-  async findAll(page: number) {
-    return await this.courseModel
-      .find()
-      .limit(this.configService.get('limitPerPage'))
-      .skip(this.configService.get('skipPerPage') * page);
+  async findAll(user: string, career: string) {
+    return await this.courseModel.find({ user, career });
   }
 
   async findOne(id: string): Promise<Course> {
@@ -153,9 +150,7 @@ export class CoursesService {
     const deliverables = await this.deliverableModel.find({ course: id });
 
     if (deliverables.length > 0) {
-      throw new BadRequestException(
-        'Todavía tiene entregas pendientes',
-      );
+      throw new BadRequestException('Todavía tiene entregas pendientes');
     }
 
     return await this.courseModel.findOneAndRemove({ _id: id });
