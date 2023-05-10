@@ -25,7 +25,8 @@ export class Deliverable {
   name: string;
 
   @Prop({
-    required: true,
+    required: false,
+    default: ""
   })
   description: string;
 

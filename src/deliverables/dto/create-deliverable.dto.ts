@@ -22,6 +22,7 @@ export class CreateDeliverableDto {
   name: string;
 
   @IsString()
+  @IsOptional()
   description: string;
 
   @IsDate()
