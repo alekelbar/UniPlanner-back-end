@@ -18,7 +18,7 @@ export class Task {
   name: string;
 
   @Prop({
-    required: true,
+    required: false,
   })
   descripcion: string;
 
