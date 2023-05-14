@@ -14,7 +14,7 @@ export class Course {
   name: string;
 
   @Prop({
-    required: true,
+    required: false,
   })
   courseDescription: string;
 
